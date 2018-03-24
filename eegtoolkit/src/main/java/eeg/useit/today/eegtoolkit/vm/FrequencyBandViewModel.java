@@ -3,6 +3,7 @@ package eeg.useit.today.eegtoolkit.vm;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 
+import com.choosemuse.libmuse.Battery;
 import com.choosemuse.libmuse.Eeg;
 import com.choosemuse.libmuse.Muse;
 import com.choosemuse.libmuse.MuseDataPacket;
@@ -30,6 +31,8 @@ public class FrequencyBandViewModel extends BaseObservable implements LiveSeries
   /** Listeners for new values that come in. */
   private List<Listener<Double>> listeners = new ArrayList<>();
 
+  final double[] percentage = new double[1];
+
   public FrequencyBandViewModel(StreamingDeviceViewModel device, Band band, ValueType type) {
     museType = FrequencyBands.toMuseType(band, type);
 
@@ -46,6 +49,14 @@ public class FrequencyBandViewModel extends BaseObservable implements LiveSeries
         );
       }
     }, museType);
+
+    device.registerDataListenerWhenConnected(new BaseDataPacketListener() {
+      @Override
+      public void receiveMuseDataPacket(MuseDataPacket museDataPacket, Muse muse) {
+        percentage[0] = museDataPacket.getBatteryValue(Battery.CHARGE_PERCENTAGE_REMAINING);
+      }
+    }, MuseDataPacketType.BATTERY);
+
   }
 
 
@@ -62,6 +73,10 @@ public class FrequencyBandViewModel extends BaseObservable implements LiveSeries
       sum += frequencyState[i];
     }
     return sum / frequencyState.length;
+  }
+
+  public double getBattery() {
+    return percentage[0];
   }
 
   // Updates the new values given the most recent data packet.

@@ -5,15 +5,20 @@ import android.databinding.DataBindingUtil;
 import android.databinding.Observable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.choosemuse.libmuse.Eeg;
 import com.choosemuse.libmuse.Muse;
+import com.choosemuse.libmuse.Battery;
+import com.choosemuse.libmuse.MuseDataPacket;
+import com.choosemuse.libmuse.MuseDataPacketType;
 import com.choosemuse.libmuse.MuseListener;
 import com.choosemuse.libmuse.MuseManagerAndroid;
 
+import eeg.useit.today.eegtoolkit.common.BaseDataPacketListener;
 import eeg.useit.today.eegtoolkit.common.FrequencyBands.Band;
 import eeg.useit.today.eegtoolkit.common.FrequencyBands.ValueType;
 import eeg.useit.today.eegtoolkit.sampleapp.databinding.ActivityDeviceDetailsBinding;
@@ -21,6 +26,8 @@ import eeg.useit.today.eegtoolkit.view.ConnectionStrengthView;
 import eeg.useit.today.eegtoolkit.view.graph.GraphGLView;
 import eeg.useit.today.eegtoolkit.view.graph.GraphSurfaceView;
 import eeg.useit.today.eegtoolkit.vm.ConnectionStrengthViewModel;
+import eeg.useit.today.eegtoolkit.vm.FrequencyBandViewModel;
+import eeg.useit.today.eegtoolkit.vm.RawChannelViewModel;
 import eeg.useit.today.eegtoolkit.vm.SensorGoodViewModel;
 import eeg.useit.today.eegtoolkit.vm.StreamingDeviceViewModel;
 import eeg.useit.today.eegtoolkit.model.TimeSeries;
@@ -34,6 +41,10 @@ public class DeviceDetailsActivity extends AppCompatActivity {
 
   /** The live device VM backing this view. */
   private final StreamingDeviceViewModel deviceVM = new StreamingDeviceViewModel();
+  FrequencyBandViewModel deviceTHETA;
+  FrequencyBandViewModel deviceDELTA;
+  FrequencyBandViewModel deviceALPHA;
+  FrequencyBandViewModel deviceBETA;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +64,12 @@ public class DeviceDetailsActivity extends AppCompatActivity {
     binding.setDeltaVM(deviceVM.createFrequencyLiveValue(Band.DELTA, ValueType.SCORE));
     binding.setAlphaVM(deviceVM.createFrequencyLiveValue(Band.ALPHA, ValueType.SCORE));
     binding.setBetaVM( deviceVM.createFrequencyLiveValue(Band.BETA,  ValueType.SCORE));
+
+    // IDK whether to do score or relative
+    deviceTHETA = (deviceVM.createFrequencyLiveValue(Band.THETA, ValueType.RELATIVE));
+    deviceDELTA = (deviceVM.createFrequencyLiveValue(Band.DELTA, ValueType.RELATIVE));
+    deviceALPHA = (deviceVM.createFrequencyLiveValue(Band.ALPHA, ValueType.RELATIVE));
+    deviceBETA = (deviceVM.createFrequencyLiveValue(Band.BETA, ValueType.RELATIVE));
 
     // Bind action bar, seems like this can't be done in the layout :(
     deviceVM.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
@@ -102,7 +119,24 @@ public class DeviceDetailsActivity extends AppCompatActivity {
       intent.putExtra("mac", this.deviceVM.getMacAddress());
       this.startActivity(intent);
       return true;
+    } else if (item.getItemId() == R.id.getValues) {
+      getEngagement();
+      return true;
     }
     return false;
   }
+
+  public double getEngagement() {
+    double engagement = 0.0;
+    engagement = deviceBETA.getAverage() / (deviceALPHA.getAverage() + deviceTHETA.getAverage());
+    Log.d("Values","TEST");
+    Log.d("Theta", String.valueOf(deviceTHETA.getAverage()));
+    Log.d("Delta", String.valueOf(deviceDELTA.getAverage()));
+    Log.d("Alpha", String.valueOf(deviceALPHA.getAverage()));
+    Log.d("Beta", String.valueOf(deviceBETA.getAverage()));
+    Log.d("Battery",String.valueOf(deviceBETA.getBattery()));
+    Log.d("Engagement", String.valueOf(engagement));
+    return engagement;
+  }
 }
+
