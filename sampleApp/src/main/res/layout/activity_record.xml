@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="eeg.useit.today.eegtoolkit.sampleapp.ListDevicesActivity">
+
+    <data>
+        <variable name="recordVM" type="eeg.useit.today.eegtoolkit.sampleapp.vm.RecordVM" />
+        <variable name="deviceVM" type="eeg.useit.today.eegtoolkit.vm.StreamingDeviceViewModel" />
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="201dp"
+            android:layout_height="44dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:text="Data to record:"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <Button
+            android:id="@+id/startRecord"
+            android:enabled="@{recordVM.canRecord()}"
+            android:text="@{recordVM.getButtonText()}"
+            android:onClick="@{() -> recordVM.handleRecord()}"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="32dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="32dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"/>
+
+        <CheckBox
+            android:id="@+id/useRaw"
+            android:checked="@{recordVM.hasUseRaw()}"
+            android:onClick="@{() -> recordVM.toggleRaw()}"
+            android:layout_width="165dp"
+            android:layout_height="32dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="32dp"
+            android:text="Raw signal"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView6"/>
+
+        <CheckBox
+            android:id="@+id/useAlpha"
+            android:checked="@{recordVM.hasUseAlpha()}"
+            android:onClick="@{() -> recordVM.toggleAlpha()}"
+            android:layout_width="165dp"
+            android:layout_height="32dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="0dp"
+            android:layout_marginTop="16dp"
+            android:text="Relative Alpha"
+            app:layout_constraintLeft_toLeftOf="@+id/useRaw"
+            app:layout_constraintRight_toRightOf="@+id/useRaw"
+            app:layout_constraintTop_toBottomOf="@+id/useRaw"/>
+
+    </android.support.constraint.ConstraintLayout>
+</layout>
+
