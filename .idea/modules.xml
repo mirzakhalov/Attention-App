@@ -5,6 +5,8 @@
       <module fileurl="file://$PROJECT_DIR$/Attention-App.iml" filepath="$PROJECT_DIR$/Attention-App.iml" />
       <module fileurl="file://$PROJECT_DIR$/Attention-App.iml" filepath="$PROJECT_DIR$/Attention-App.iml" />
       <module fileurl="file://$PROJECT_DIR$/eegtoolkit/eegtoolkit.iml" filepath="$PROJECT_DIR$/eegtoolkit/eegtoolkit.iml" />
+      <module fileurl="file://$PROJECT_DIR$/eegtoolkit/eegtoolkit.iml" filepath="$PROJECT_DIR$/eegtoolkit/eegtoolkit.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sampleApp/sampleApp.iml" filepath="$PROJECT_DIR$/sampleApp/sampleApp.iml" />
       <module fileurl="file://$PROJECT_DIR$/sampleApp/sampleApp.iml" filepath="$PROJECT_DIR$/sampleApp/sampleApp.iml" />
     </modules>
   </component>
