@@ -27,6 +27,10 @@ import com.choosemuse.libmuse.Muse;
 import com.choosemuse.libmuse.MuseListener;
 import com.choosemuse.libmuse.MuseManagerAndroid;
 
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import eeg.useit.today.eegtoolkit.common.FrequencyBands;
 import eeg.useit.today.eegtoolkit.sampleapp.databinding.ActivityDeviceDetailsBinding;
 import eeg.useit.today.eegtoolkit.vm.ConnectionStrengthViewModel;
@@ -69,24 +73,52 @@ public class RunningActivity extends AppCompatActivity {
             long itr = 0;
 
             public void onTick(long millisUntilFinished) {
-                ProgressBar bar = (ProgressBar) findViewById(R.id.engagementProgress);
-                bar.setProgress((int) (getEngagement() * 100), true);
 
                 engagementVals[(int)(itr % threshold)] = getEngagement();
                 drowsinessVals[(int)(itr % threshold)] = DeviceDetailsActivity.getDrowsiness();
                 if(!isPaused) {
+                    ProgressBar bar = (ProgressBar) findViewById(R.id.engagementProgress);
+                    bar.setProgress((int) (getEngagement() * 100), true);
                     if ((int) (itr % threshold) == (threshold - 1)) {
                         slidingEngagementAverage = getSlidingAvg(engagementVals);
                         slidingDrowisnessAverage = getSlidingAvg(drowsinessVals);
 
                         if (slidingEngagementAverage != NaN && !isEngaged(aSlider,dSlider,slidingEngagementAverage,slidingDrowisnessAverage)) {
                             Log.d("Engagement", String.valueOf(slidingEngagementAverage));
+                            //Alert builder
                             // 1. Instantiate an AlertDialog.Builder with its constructor
                             AlertDialog.Builder builder = new AlertDialog.Builder(RunningActivity.this);
 
-                            builder.setTitle("Notification Box");
-                            builder.setMessage("Test: This is a test notification to help focus");
+                            int min = 0;
+                            int max = 4;
+
+                            Random r = new Random();
+                            int i1 = r.nextInt(max - min + 1) + min;
+                            String[] titles = {
+                                    "Be actively engaged!",
+                                    "Stay focused!",
+                                    "Don't doze off!",
+                                    "Are you paying attention?",
+                                    "Wake up your brain!"
+                            };
+
+                            int min2 = 0;
+                            int max2 = 4;
+
+                            Random r2 = new Random();
+                            int i2 = r2.nextInt(max2 - min2 + 1) + min2;
+                            String[] sayings = {
+                                    "In small doses, caffeine can help boost focus.",
+                                    "Make a to-do list to concentrate your energy.",
+                                    "Taking a five-minute break can help refocus your attention.",
+                                    "Make sure to remove any possible distractions from the environment.",
+                                    "Take a deep breath and stretch before you continue."
+                            };
+
+                            builder.setTitle(titles[i1]);
+                            builder.setMessage(sayings[i2]);
                             // Add the buttons
+                            /*
                             builder.setPositiveButton("Positive", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     // User clicked OK button
@@ -97,15 +129,24 @@ public class RunningActivity extends AppCompatActivity {
                                     // User cancelled the dialog
                                 }
                             });
+                            */
 
                             // Create the AlertDialog
-                            AlertDialog dialog = builder.create();
+                            final AlertDialog dialog = builder.create();
                             dialog.show();
+
+                            final Timer timer2 = new Timer();
+                            timer2.schedule(new TimerTask() {
+                                public void run() {
+                                    dialog.dismiss();
+                                    timer2.cancel(); //this will cancel the timer of the system
+                                }
+                            }, 10000); // the timer will count 5 seconds....
 
                             MediaPlayer mPlayer = MediaPlayer.create(RunningActivity.this, R.raw.sound);
                             mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
                             mPlayer.start();
-
+                            //
                             // Vibrate
                             vibrate();
                         } else if (slidingEngagementAverage != NaN && isEngaged(aSlider,dSlider,slidingEngagementAverage,slidingDrowisnessAverage)){
@@ -152,7 +193,7 @@ public class RunningActivity extends AppCompatActivity {
 
     public void goToMain (View view){
         countDownTimer.cancel();
-        startActivity(new Intent(RunningActivity.this, DeviceDetailsActivity.class));
+        startActivity(new Intent(RunningActivity.this, ListDevicesActivity.class));
     }
 
     public void pauseTimer (View view){
