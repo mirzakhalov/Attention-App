@@ -49,6 +49,7 @@ import eeg.useit.today.eegtoolkit.model.TimeSeries;
 import android.os.Vibrator;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 
 import static java.lang.Double.NaN;
 
@@ -129,6 +130,7 @@ public class DeviceDetailsActivity extends AppCompatActivity {
     countDownTimer = new CountDownTimer(600000, 1000) {
 
       public void onTick(long millisUntilFinished) {
+
         if(isGoodVM.getConnected()[0] && isGoodVM.getConnected()[1] && isGoodVM.getConnected()[2] && isGoodVM.getConnected()[3]) {
           button.setText("Ready");
         } else {

@@ -34,6 +34,7 @@ import eeg.useit.today.eegtoolkit.vm.FrequencyBandViewModel;
 import eeg.useit.today.eegtoolkit.vm.SensorGoodViewModel;
 import eeg.useit.today.eegtoolkit.vm.StreamingDeviceViewModel;
 
+import static eeg.useit.today.eegtoolkit.sampleapp.DeviceDetailsActivity.getEngagement;
 import static java.lang.Double.NaN;
 
 public class RunningActivity extends AppCompatActivity {
@@ -58,7 +59,7 @@ public class RunningActivity extends AppCompatActivity {
 
         Log.d("TAG","Marker2");
         countDownTimer = new CountDownTimer(600000, 1000) {
-            int threshold = 10;
+            int threshold = 20;
             double[] engagementVals = new  double[threshold];
             double[] drowsinessVals = new double[threshold];
             int aSlider = MainActivity.aSliderVal[0];
@@ -67,9 +68,11 @@ public class RunningActivity extends AppCompatActivity {
             double slidingDrowisnessAverage;
             long itr = 0;
 
-
             public void onTick(long millisUntilFinished) {
-                engagementVals[(int)(itr % threshold)] = DeviceDetailsActivity.getEngagement();
+                ProgressBar bar = (ProgressBar) findViewById(R.id.engagementProgress);
+                bar.setProgress((int) (getEngagement() * 100), true);
+
+                engagementVals[(int)(itr % threshold)] = getEngagement();
                 drowsinessVals[(int)(itr % threshold)] = DeviceDetailsActivity.getDrowsiness();
                 if(!isPaused) {
                     if ((int) (itr % threshold) == (threshold - 1)) {
@@ -168,7 +171,7 @@ public class RunningActivity extends AppCompatActivity {
 
     public boolean isEngaged(int aSlider, int dSlider, double slidingEngagementAverage, double slidingDrowisnessAverage){
 
-        return slidingEngagementAverage >= 0.2 + (0.5 * 0.01 * (double)aSlider) && slidingDrowisnessAverage <= 0.5 - (0.10 * 0.01 * (double)aSlider);
+        return slidingEngagementAverage >= 0.2 + (0.5 * 0.01 * (double)aSlider) && slidingDrowisnessAverage <= 0.5 - (0.10 * 0.01 * (double)dSlider);
 
     }
 }

@@ -1,58 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/main_background"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp">
+<layout >
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/button3"
-        android:layout_alignBottom="@+id/button3"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="12dp"
-        android:background="@drawable/rounded_button"
-        android:drawableStart="@drawable/ic_stop"
-        android:onClick="goToMain"
-        android:paddingStart="10dp"
-        android:text="@string/end_button"
-        android:textColor="#694a84" />
+    <data>
+        <variable name="deviceVM" type="eeg.useit.today.eegtoolkit.vm.StreamingDeviceViewModel" />
+        <variable name="isGoodVM" type="eeg.useit.today.eegtoolkit.vm.SensorGoodViewModel" />
+        <variable name="connectionVM" type="eeg.useit.today.eegtoolkit.vm.ConnectionStrengthViewModel" />
+        <variable name="rawVM" type="eeg.useit.today.eegtoolkit.vm.RawChannelViewModel" />
 
-    <ImageView
-        android:id="@+id/imageView6"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="87dp"
-        android:contentDescription="@string/temp"
-        app:srcCompat="@drawable/logo" />
+        <variable name="thetaVM" type="eeg.useit.today.eegtoolkit.vm.FrequencyBandViewModel" />
+        <variable name="deltaVM" type="eeg.useit.today.eegtoolkit.vm.FrequencyBandViewModel" />
+        <variable name="alphaVM" type="eeg.useit.today.eegtoolkit.vm.FrequencyBandViewModel" />
+        <variable name="betaVM" type="eeg.useit.today.eegtoolkit.vm.FrequencyBandViewModel" />
+    </data>
 
-    <ProgressBar
-        android:id="@+id/progressBar2"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="500dp"
-        android:layout_height="500dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true" />
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:background="@drawable/main_background"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
 
-    <Button
-        android:id="@+id/button3"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="33dp"
-        android:layout_marginStart="12dp"
-        android:background="@drawable/rounded_button"
-        android:drawableStart="@drawable/ic_pause"
-        android:onClick="pauseTimer"
-        android:paddingStart="10dp"
-        android:text="Pause"
-        android:textColor="#694a84" />
+        <Button
+            android:id="@+id/button"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/button3"
+            android:layout_alignBottom="@+id/button3"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="12dp"
+            android:background="@drawable/rounded_button"
+            android:drawableStart="@drawable/ic_stop"
+            android:onClick="goToMain"
+            android:paddingStart="10dp"
+            android:text="@string/end_button"
+            android:textColor="#694a84" />
 
-</RelativeLayout>
+        <ImageView
+            android:id="@+id/imageView6"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="87dp"
+            android:contentDescription="@string/temp"
+            app:srcCompat="@drawable/logo" />
+
+        <ProgressBar
+            android:id="@+id/progressBar2"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="500dp"
+            android:layout_height="500dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true" />
+
+        <ProgressBar
+            android:id="@+id/engagementProgress"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="200dp"
+            android:layout_height="20dp"
+            android:progress="50"
+            android:layout_alignTop="@+id/alphaText"
+            android:layout_toEndOf="@+id/button3"
+            android:max="100"
+            tools:layout_editor_absoluteX="22dp" />
+
+
+        <TextView
+            android:id="@+id/alphaText"
+            android:layout_width="150dp"
+            android:layout_height="30dp"
+            android:layout_alignBottom="@+id/progressBar2"
+            android:layout_alignStart="@+id/button3"
+            android:layout_marginStart="6dp"
+            android:text="Engagement:"
+            android:textAppearance="@style/TextAppearance.AppCompat.Button"
+            android:textColor="@color/colorAccent"
+            android:textSize="15sp" />
+
+        <Button
+            android:id="@+id/button3"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="33dp"
+            android:layout_marginStart="12dp"
+            android:background="@drawable/rounded_button"
+            android:drawableStart="@drawable/ic_pause"
+            android:onClick="pauseTimer"
+            android:paddingStart="10dp"
+            android:text="Pause"
+            android:textColor="#694a84" />
+    </RelativeLayout>
+
+</layout>
