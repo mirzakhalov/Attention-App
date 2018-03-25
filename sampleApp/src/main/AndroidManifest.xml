@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <uses-feature
@@ -31,6 +32,10 @@
         <activity
             android:name=".DeviceDetailsActivity"
             android:label="@string/title_activity_device_details"
+            android:theme="@style/AppTheme">
+        </activity>
+        <activity android:name=".Running"
+            android:label="Running"
             android:theme="@style/AppTheme">
         </activity>
         <activity

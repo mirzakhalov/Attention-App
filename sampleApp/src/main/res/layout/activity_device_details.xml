@@ -265,6 +265,31 @@
             android:gravity="center"
             app:layout_constraintTop_toBottomOf="@+id/graphGL" />
 
+        <TextView
+            android:id="@+id/deltaText"
+            android:layout_width="92dp"
+            android:layout_height="29dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:text="Engagement:"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/startButton"/>
+
+        <ProgressBar
+            android:id="@+id/deltaProgress"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:progress="@{(int)(Double.valueOf(100) * (betaVM.average/(alphaVM.average + thetaVM.average)))}"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="4dp"
+            android:max="100"
+            app:layout_constraintLeft_toRightOf="@+id/deltaText"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/startButton"
+            app:layout_constraintHorizontal_bias="0.0"/>
+
     </android.support.constraint.ConstraintLayout>
 
 </layout>
