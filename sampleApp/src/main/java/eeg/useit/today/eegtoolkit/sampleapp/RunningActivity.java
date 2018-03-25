@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.SeekBar;
 
 import com.choosemuse.libmuse.Eeg;
 import com.choosemuse.libmuse.Muse;
@@ -60,6 +61,8 @@ public class RunningActivity extends AppCompatActivity {
             int threshold = 10;
             double[] engagementVals = new  double[threshold];
             double[] drowsinessVals = new double[threshold];
+            int aSlider = MainActivity.aSliderVal[0];
+            int dSlider = MainActivity.dSliderVal[0];
             double slidingEngagementAverage;
             double slidingDrowisnessAverage;
             long itr = 0;
@@ -71,8 +74,9 @@ public class RunningActivity extends AppCompatActivity {
                 if(!isPaused) {
                     if ((int) (itr % threshold) == (threshold - 1)) {
                         slidingEngagementAverage = getSlidingAvg(engagementVals);
+                        slidingDrowisnessAverage = getSlidingAvg(drowsinessVals);
 
-                        if (slidingEngagementAverage != NaN && slidingEngagementAverage < 0.3) {
+                        if (slidingEngagementAverage != NaN && !isEngaged(aSlider,dSlider,slidingEngagementAverage,slidingDrowisnessAverage)) {
                             Log.d("Engagement", String.valueOf(slidingEngagementAverage));
                             // 1. Instantiate an AlertDialog.Builder with its constructor
                             AlertDialog.Builder builder = new AlertDialog.Builder(RunningActivity.this);
@@ -101,7 +105,7 @@ public class RunningActivity extends AppCompatActivity {
 
                             // Vibrate
                             vibrate();
-                        } else if (slidingEngagementAverage >= 0.3) {
+                        } else if (slidingEngagementAverage != NaN && isEngaged(aSlider,dSlider,slidingEngagementAverage,slidingDrowisnessAverage)){
                             Log.d("Engagement", "good");
                         } else {
                             Log.d("Engagement", "Not connected");
@@ -110,6 +114,8 @@ public class RunningActivity extends AppCompatActivity {
                     }
                 }
                 itr = itr + 1;
+                Log.d("Tag",String.valueOf(aSlider));
+                Log.d("Tag",String.valueOf(dSlider));
             }
 
             public void onFinish() {
@@ -158,5 +164,11 @@ public class RunningActivity extends AppCompatActivity {
             button.setText("Pause");
 
         }
+    }
+
+    public boolean isEngaged(int aSlider, int dSlider, double slidingEngagementAverage, double slidingDrowisnessAverage){
+
+        return slidingEngagementAverage >= 0.2 + (0.5 * 0.01 * (double)aSlider) && slidingDrowisnessAverage <= 0.5 - (0.10 * 0.01 * (double)aSlider);
+
     }
 }

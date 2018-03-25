@@ -126,7 +126,7 @@ public class DeviceDetailsActivity extends AppCompatActivity {
     }
 
     final Button button = (Button)findViewById(R.id.startButton);
-    countDownTimer = new CountDownTimer(60000, 1000) {
+    countDownTimer = new CountDownTimer(600000, 1000) {
 
       public void onTick(long millisUntilFinished) {
         if(isGoodVM.getConnected()[0] && isGoodVM.getConnected()[1] && isGoodVM.getConnected()[2] && isGoodVM.getConnected()[3]) {
@@ -135,12 +135,12 @@ public class DeviceDetailsActivity extends AppCompatActivity {
           button.setText("Adjust Muse");
         }
         if(getEngagement() != NaN && getEngagement() < 0.3) {
-          Log.d("Engagement", String.valueOf(getEngagement()));
+          //Log.d("Engagement", String.valueOf(getEngagement()));
           //vibrate();
         } else if (getEngagement() >= 0.3){
-          Log.d("Engagement", "good");
+          //Log.d("Engagement", "good");
         } else {
-          Log.d("Engagement", "Not connected");
+          //Log.d("Engagement", "Not connected");
           //vibrate();
         }
       }
@@ -214,13 +214,13 @@ public class DeviceDetailsActivity extends AppCompatActivity {
 
   public static double getEngagement() {
     double engagement = deviceBETA.getAverage() / (deviceALPHA.getAverage() + deviceTHETA.getAverage());
-    //Log.d("Values", "TEST");
-    //Log.d("Theta", String.valueOf(deviceTHETA.getAverage()));
+    Log.d("Values", "TEST");
+    Log.d("Theta", String.valueOf(deviceTHETA.getAverage()));
     //Log.d("Delta", String.valueOf(deviceDELTA.getAverage()));
     //Log.d("Alpha", String.valueOf(deviceALPHA.getAverage()));
     //Log.d("Beta", String.valueOf(deviceBETA.getAverage()));
     //Log.d("Battery", String.valueOf(deviceBETA.getBattery()));
-    //Log.d("Engagement", String.valueOf(engagement));
+    Log.d("Engagement", String.valueOf(engagement));
     return engagement;
   }
 

@@ -119,19 +119,16 @@
             android:id="@+id/textView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="116dp"
             android:gravity="center"
             android:text="GraphGLView:"
-            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/connectionText" />
 
         <eeg.useit.today.eegtoolkit.view.graph.GraphGLView
             android:id="@+id/graphGL"
             android:layout_width="395dp"
             android:layout_height="120dp"
-            android:layout_marginTop="20dp"
-            app:layout_constraintHorizontal_bias="0.454"
+            android:layout_marginTop="8dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView4"
@@ -264,7 +261,7 @@
             style="@style/Widget.AppCompat.Button"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="43dp"
+            android:layout_marginTop="132dp"
             android:background="@drawable/rounded_button"
             android:gravity="center"
             android:onClick="goToMain"
@@ -272,33 +269,9 @@
             android:textColor="#694a84"
             android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/graphGL" />
-
-        <TextView
-            android:id="@+id/deltaText"
-            android:layout_width="92dp"
-            android:layout_height="29dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="36dp"
-            android:text="Engagement:"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/startButton" />
-
-        <ProgressBar
-            android:id="@+id/deltaProgress"
-            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-            android:layout_width="0dp"
-            android:layout_height="30dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginTop="36dp"
-            android:max="100"
-            android:progress="@{(int)(Double.valueOf(100) * (betaVM.average/(alphaVM.average + thetaVM.average)))}"
-            app:layout_constraintLeft_toRightOf="@+id/deltaText"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/startButton" />
 
     </android.support.constraint.ConstraintLayout>
 
