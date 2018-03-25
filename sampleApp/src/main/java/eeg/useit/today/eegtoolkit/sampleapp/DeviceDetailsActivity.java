@@ -1,9 +1,24 @@
 package eeg.useit.today.eegtoolkit.sampleapp;
 
+import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.databinding.Observable;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.media.RingtoneManager;
+import android.media.SoundPool;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -31,6 +46,11 @@ import eeg.useit.today.eegtoolkit.vm.RawChannelViewModel;
 import eeg.useit.today.eegtoolkit.vm.SensorGoodViewModel;
 import eeg.useit.today.eegtoolkit.vm.StreamingDeviceViewModel;
 import eeg.useit.today.eegtoolkit.model.TimeSeries;
+import android.os.Vibrator;
+import android.view.View;
+import android.widget.Button;
+
+import static java.lang.Double.NaN;
 
 /**
  * Example activity that displays live details for a connected device.
@@ -49,13 +69,20 @@ public class DeviceDetailsActivity extends AppCompatActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-
+/*
+    Button startSession = findViewById(R.id.startButton);
+    startSession.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        startActivity(intent);
+      }
+    });*/
     // Initialize Muse first up.
     MuseManagerAndroid.getInstance().setContext(this);
 
     // Bind viewmodel to the view.
     ActivityDeviceDetailsBinding binding =
-        DataBindingUtil.setContentView(this, R.layout.activity_device_details);
+            DataBindingUtil.setContentView(this, R.layout.activity_device_details);
     binding.setDeviceVM(deviceVM);
     binding.setIsGoodVM(new SensorGoodViewModel(deviceVM));
     binding.setConnectionVM(new ConnectionStrengthViewModel(deviceVM));
@@ -66,17 +93,18 @@ public class DeviceDetailsActivity extends AppCompatActivity {
     binding.setBetaVM( deviceVM.createFrequencyLiveValue(Band.BETA,  ValueType.SCORE));
 
     // IDK whether to do score or relative
+    Log.d("Top","Restarted");
     deviceTHETA = (deviceVM.createFrequencyLiveValue(Band.THETA, ValueType.RELATIVE));
     deviceDELTA = (deviceVM.createFrequencyLiveValue(Band.DELTA, ValueType.RELATIVE));
     deviceALPHA = (deviceVM.createFrequencyLiveValue(Band.ALPHA, ValueType.RELATIVE));
     deviceBETA = (deviceVM.createFrequencyLiveValue(Band.BETA, ValueType.RELATIVE));
 
-    // Bind action bar, seems like this can't be done in the layout :(
+    // Bind action bar, seems like this can't be done in the layout 😞
     deviceVM.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
       @Override
       public void onPropertyChanged(Observable sender, int propertyId) {
         DeviceDetailsActivity.this.getSupportActionBar().setTitle(
-            String.format("%s: %s", deviceVM.getName(), deviceVM.getConnectionState())
+                String.format("%s: %s", deviceVM.getName(), deviceVM.getConnectionState())
         );
       }
     });
@@ -98,6 +126,23 @@ public class DeviceDetailsActivity extends AppCompatActivity {
         }
       });
     }
+
+    new CountDownTimer(30000, 1000) {
+
+      public void onTick(long millisUntilFinished) {
+        if(getEngagement() != NaN && getEngagement() < 0.3) {
+          Log.d("Engagement", String.valueOf(getEngagement()));
+        } else if (getEngagement() >= 0.3){
+          Log.d("Engagement", "good");
+        } else {
+          Log.d("Engagement", "bad");
+        }
+      }
+
+      public void onFinish() {
+        Log.d("Engagement","Finished");
+      }
+    }.start();
   }
 
   @Override
@@ -121,22 +166,65 @@ public class DeviceDetailsActivity extends AppCompatActivity {
       return true;
     } else if (item.getItemId() == R.id.getValues) {
       getEngagement();
+
+      // 1. Instantiate an AlertDialog.Builder with its constructor
+      AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+      builder.setTitle("Notification Box");
+      builder.setMessage("Test: This is a test notification to help focus");
+      // Add the buttons
+      builder.setPositiveButton("Positive", new DialogInterface.OnClickListener() {
+        public void onClick(DialogInterface dialog, int id) {
+          // User clicked OK button
+        }
+      });
+      builder.setNegativeButton("Negative", new DialogInterface.OnClickListener() {
+        public void onClick(DialogInterface dialog, int id) {
+          // User cancelled the dialog
+        }
+      });
+
+      // Create the AlertDialog
+      AlertDialog dialog = builder.create();
+      //dialog.show();
+      /*
+      MediaPlayer mPlayer = MediaPlayer.create(this, R.raw.sound);
+      mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+      mPlayer.start();
+      */
+      // Vibrate
+      Handler handler = new Handler();
+      handler.postDelayed(new Runnable() {
+        public void run() {
+          vibrate();
+        }
+      }, 10000);
+
       return true;
     }
     return false;
   }
 
   public double getEngagement() {
-    double engagement = 0.0;
-    engagement = deviceBETA.getAverage() / (deviceALPHA.getAverage() + deviceTHETA.getAverage());
-    Log.d("Values","TEST");
+    double engagement = deviceBETA.getAverage() / (deviceALPHA.getAverage() + deviceTHETA.getAverage());
+    Log.d("Values", "TEST");
     Log.d("Theta", String.valueOf(deviceTHETA.getAverage()));
     Log.d("Delta", String.valueOf(deviceDELTA.getAverage()));
     Log.d("Alpha", String.valueOf(deviceALPHA.getAverage()));
     Log.d("Beta", String.valueOf(deviceBETA.getAverage()));
-    Log.d("Battery",String.valueOf(deviceBETA.getBattery()));
+    Log.d("Battery", String.valueOf(deviceBETA.getBattery()));
     Log.d("Engagement", String.valueOf(engagement));
     return engagement;
   }
-}
 
+  public void vibrate(){
+    Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+    // Vibrate for 500 milliseconds
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      v.vibrate(VibrationEffect.createOneShot(500,VibrationEffect.DEFAULT_AMPLITUDE));
+    }else{
+      //deprecated in API 26
+      v.vibrate(500);
+    }
+  }
+}
