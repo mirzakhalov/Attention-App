@@ -32,7 +32,7 @@
         <activity
             android:name=".DeviceDetailsActivity"
             android:label="@string/title_activity_device_details"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme2">
         </activity>
         <activity
             android:name=".MoreDeviceDetailsActivity"

@@ -22,6 +22,7 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@drawable/main_background"
         tools:context="eeg.useit.today.eegtoolkit.sampleapp.DeviceDetailsActivity">
 
 
@@ -36,7 +37,7 @@
             android:text="Is Good:"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="@+id/connectionText"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <CheckBox
             android:id="@+id/connected0"
@@ -48,8 +49,8 @@
             android:checked='@{isGoodVM.connected[0]}'
             android:clickable="false"
             android:gravity="center"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintLeft_toRightOf="@+id/isGoodText"/>
+            app:layout_constraintLeft_toRightOf="@+id/isGoodText"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <CheckBox
             android:id="@+id/connected1"
@@ -61,7 +62,7 @@
             android:checked='@{isGoodVM.connected[1]}'
             android:clickable="false"
             app:layout_constraintLeft_toRightOf="@+id/connected0"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <CheckBox
             android:id="@+id/connected2"
@@ -73,7 +74,7 @@
             android:checked='@{isGoodVM.connected[2]}'
             android:clickable="false"
             app:layout_constraintLeft_toRightOf="@+id/connected1"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <CheckBox
             android:id="@+id/connected3"
@@ -85,23 +86,21 @@
             android:checked='@{isGoodVM.connected[3]}'
             android:clickable="false"
             app:layout_constraintLeft_toRightOf="@+id/connected2"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/connectionText"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
             android:gravity="right|center_vertical"
             android:text="Connection:"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/isGoodText"/>
+            app:layout_constraintTop_toBottomOf="@+id/isGoodText" />
 
         <eeg.useit.today.eegtoolkit.view.ConnectionStrengthView
             android:id="@+id/connectionStrength"
-            app:connectionStrength="@{connectionVM}"
-            custom:backgroundColor="#eec933"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginBottom="0dp"
@@ -109,31 +108,35 @@
             android:layout_marginRight="0dp"
             android:layout_marginTop="0dp"
             android:gravity="center"
+            app:connectionStrength="@{connectionVM}"
             app:layout_constraintBottom_toBottomOf="@+id/connectionText"
+            app:layout_constraintLeft_toLeftOf="@+id/connected0"
             app:layout_constraintRight_toRightOf="@+id/connected3"
             app:layout_constraintTop_toTopOf="@+id/connectionText"
-            app:layout_constraintLeft_toLeftOf="@+id/connected0"/>
+            custom:backgroundColor="#ffffff" />
+
         <TextView
             android:id="@+id/textView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="GraphGLView:"
-            android:gravity="center"
-            app:layout_constraintTop_toBottomOf="@+id/connectionText"
             android:layout_marginLeft="8dp"
+            android:layout_marginTop="24dp"
+            android:gravity="center"
+            android:text="GraphGLView:"
             app:layout_constraintLeft_toLeftOf="parent"
-            android:layout_marginStart="8dp"/>
+            app:layout_constraintTop_toBottomOf="@+id/connectionText" />
 
         <eeg.useit.today.eegtoolkit.view.graph.GraphGLView
             android:id="@+id/graphGL"
-            app:timeSeries="@{rawVM}"
-            custom:durationSec="5"
             android:layout_width="395dp"
             android:layout_height="120dp"
+            android:layout_marginTop="20dp"
+            app:layout_constraintHorizontal_bias="0.454"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView4"
-            />
+            app:timeSeries="@{rawVM}"
+            custom:durationSec="5" />
         <!--
         <TextView
             android:id="@+id/textView5"
@@ -259,37 +262,43 @@
         <Button
             android:id="@+id/startButton"
             style="@style/Widget.AppCompat.Button"
-            android:layout_width="wrap_content"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:text="Adjust Headset"
+            android:layout_marginTop="43dp"
+            android:background="@drawable/rounded_button"
             android:gravity="center"
             android:onClick="goToMain"
+            android:text="Button"
+            android:textColor="#694a84"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/graphGL" />
 
         <TextView
             android:id="@+id/deltaText"
             android:layout_width="92dp"
             android:layout_height="29dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="36dp"
             android:text="Engagement:"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/startButton"/>
+            app:layout_constraintTop_toBottomOf="@+id/startButton" />
 
         <ProgressBar
             android:id="@+id/deltaProgress"
             style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-            android:progress="@{(int)(Double.valueOf(100) * (betaVM.average/(alphaVM.average + thetaVM.average)))}"
             android:layout_width="0dp"
             android:layout_height="30dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="36dp"
             android:max="100"
+            android:progress="@{(int)(Double.valueOf(100) * (betaVM.average/(alphaVM.average + thetaVM.average)))}"
             app:layout_constraintLeft_toRightOf="@+id/deltaText"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/startButton"
-            app:layout_constraintHorizontal_bias="0.0"/>
+            app:layout_constraintTop_toBottomOf="@+id/startButton" />
 
     </android.support.constraint.ConstraintLayout>
 

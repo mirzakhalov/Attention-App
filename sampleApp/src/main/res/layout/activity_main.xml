@@ -34,7 +34,6 @@
         android:id="@+id/seekBar4"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/seekBar2"
         android:layout_alignStart="@+id/seekBar2"
         android:layout_below="@+id/textView"
         android:layout_marginTop="30dp" />
@@ -44,7 +43,6 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_above="@+id/textView2"
-        android:layout_alignLeft="@+id/imageView2"
         android:layout_alignStart="@+id/imageView2"
         android:layout_marginBottom="7dp"
         android:contentDescription="@string/temp"
@@ -79,11 +77,12 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:layout_marginBottom="30dp"
-        android:background="#FFFFFF"
-        android:drawableLeft="@drawable/ic_play"
+        android:background="@drawable/rounded_button"
+        android:paddingStart="3dp"
         android:drawableStart="@drawable/ic_play"
         android:onClick="goToRunning"
         android:text="@string/start_button"
+        android:textColor="#694a84"
         android:textSize="15sp" />
 
 </RelativeLayout>

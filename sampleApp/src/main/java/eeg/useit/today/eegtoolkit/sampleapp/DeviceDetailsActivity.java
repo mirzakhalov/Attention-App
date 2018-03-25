@@ -61,11 +61,13 @@ public class DeviceDetailsActivity extends AppCompatActivity {
 
   /** The live device VM backing this view. */
   private final StreamingDeviceViewModel deviceVM = new StreamingDeviceViewModel();
-  FrequencyBandViewModel deviceTHETA;
-  FrequencyBandViewModel deviceDELTA;
-  FrequencyBandViewModel deviceALPHA;
-  FrequencyBandViewModel deviceBETA;
+  static FrequencyBandViewModel deviceTHETA;
+  static FrequencyBandViewModel deviceDELTA;
+  static FrequencyBandViewModel deviceALPHA;
+  static FrequencyBandViewModel deviceBETA;
   SensorGoodViewModel isGoodVM;
+
+  CountDownTimer countDownTimer;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -124,7 +126,7 @@ public class DeviceDetailsActivity extends AppCompatActivity {
     }
 
     final Button button = (Button)findViewById(R.id.startButton);
-    new CountDownTimer(60000, 1000) {
+    countDownTimer = new CountDownTimer(60000, 1000) {
 
       public void onTick(long millisUntilFinished) {
         if(isGoodVM.getConnected()[0] && isGoodVM.getConnected()[1] && isGoodVM.getConnected()[2] && isGoodVM.getConnected()[3]) {
@@ -210,7 +212,7 @@ public class DeviceDetailsActivity extends AppCompatActivity {
     return false;
   }
 
-  public double getEngagement() {
+  public static double getEngagement() {
     double engagement = deviceBETA.getAverage() / (deviceALPHA.getAverage() + deviceTHETA.getAverage());
     //Log.d("Values", "TEST");
     //Log.d("Theta", String.valueOf(deviceTHETA.getAverage()));
@@ -220,6 +222,18 @@ public class DeviceDetailsActivity extends AppCompatActivity {
     //Log.d("Battery", String.valueOf(deviceBETA.getBattery()));
     //Log.d("Engagement", String.valueOf(engagement));
     return engagement;
+  }
+
+  public static double getDrowsiness() {
+    double drowsiness = deviceTHETA.getAverage();
+    //Log.d("Values", "TEST");
+    //Log.d("Theta", String.valueOf(deviceTHETA.getAverage()));
+    //Log.d("Delta", String.valueOf(deviceDELTA.getAverage()));
+    //Log.d("Alpha", String.valueOf(deviceALPHA.getAverage()));
+    //Log.d("Beta", String.valueOf(deviceBETA.getAverage()));
+    //Log.d("Battery", String.valueOf(deviceBETA.getBattery()));
+    //Log.d("Engagement", String.valueOf(engagement));
+    return drowsiness;
   }
 
   public void vibrate(){
@@ -235,6 +249,7 @@ public class DeviceDetailsActivity extends AppCompatActivity {
 
   public void goToMain (View view){
     if(isGoodVM.getConnected()[0] && isGoodVM.getConnected()[1] && isGoodVM.getConnected()[2] && isGoodVM.getConnected()[3]) {
+      countDownTimer.cancel();
       startActivity(new Intent(DeviceDetailsActivity.this, MainActivity.class));
     }
   }

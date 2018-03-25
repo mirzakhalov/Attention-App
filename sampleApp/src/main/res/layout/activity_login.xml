@@ -1,7 +1,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/main_background"
     android:gravity="center_horizontal"
     android:orientation="vertical"
     android:paddingBottom="16dp"
@@ -11,6 +13,13 @@
     tools:context="eeg.useit.today.eegtoolkit.login.Login">
 
     <!-- Login progress -->
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="20dp"
+        android:src="@drawable/logo" />
+
     <ProgressBar
         android:id="@+id/login_progress"
         style="?android:attr/progressBarStyleLarge"
@@ -41,7 +50,8 @@
                     android:hint="Email"
                     android:inputType="textEmailAddress"
                     android:maxLines="1"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:textColor="@color/colorAccent" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -58,18 +68,23 @@
                     android:imeOptions="actionUnspecified"
                     android:inputType="textPassword"
                     android:maxLines="1"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:textColor="@color/colorAccent" />
 
             </android.support.design.widget.TextInputLayout>
 
             <Button
                 android:id="@+id/email_sign_in_button"
-                style="?android:textAppearanceSmall"
-                android:layout_width="match_parent"
+                style="@style/Widget.AppCompat.Button"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:layout_marginTop="16dp"
+                android:background="@drawable/rounded_button"
                 android:text="Sign In"
-                android:textStyle="bold" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Button"
+                android:textSize="15sp"
+                android:textColor="#694a84" />
 
         </LinearLayout>
     </ScrollView>
