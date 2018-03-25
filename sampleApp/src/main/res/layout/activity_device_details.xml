@@ -261,7 +261,7 @@
             style="@style/Widget.AppCompat.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Button"
+            android:text="Adjust Headset"
             android:gravity="center"
             android:onClick="goToMain"
             app:layout_constraintTop_toBottomOf="@+id/graphGL" />

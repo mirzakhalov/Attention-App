@@ -65,19 +65,12 @@ public class DeviceDetailsActivity extends AppCompatActivity {
   FrequencyBandViewModel deviceDELTA;
   FrequencyBandViewModel deviceALPHA;
   FrequencyBandViewModel deviceBETA;
+  SensorGoodViewModel isGoodVM;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    /*
-    Button startSession = findViewById(R.id.startButton);
-    startSession.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        startActivity(new Intent(DeviceDetailsActivity.this, MainActivity.class));
-      }
-    });
-    */
+
     // Initialize Muse first up.
     MuseManagerAndroid.getInstance().setContext(this);
 
@@ -110,6 +103,8 @@ public class DeviceDetailsActivity extends AppCompatActivity {
       }
     });
 
+    isGoodVM = new SensorGoodViewModel(deviceVM);
+
     // And attach the desired muse to the VM once connected.
     final String macAddress = getIntent().getExtras().getString("mac");
     if (macAddress != null) {
@@ -128,12 +123,18 @@ public class DeviceDetailsActivity extends AppCompatActivity {
       });
     }
 
+    final Button button = (Button)findViewById(R.id.startButton);
     new CountDownTimer(60000, 1000) {
 
       public void onTick(long millisUntilFinished) {
+        if(isGoodVM.getConnected()[0] && isGoodVM.getConnected()[1] && isGoodVM.getConnected()[2] && isGoodVM.getConnected()[3]) {
+          button.setText("Ready");
+        } else {
+          button.setText("Adjust Muse");
+        }
         if(getEngagement() != NaN && getEngagement() < 0.3) {
           Log.d("Engagement", String.valueOf(getEngagement()));
-          vibrate();
+          //vibrate();
         } else if (getEngagement() >= 0.3){
           Log.d("Engagement", "good");
         } else {
@@ -146,6 +147,7 @@ public class DeviceDetailsActivity extends AppCompatActivity {
         Log.d("Engagement","Finished");
       }
     }.start();
+
   }
 
   @Override
@@ -232,6 +234,8 @@ public class DeviceDetailsActivity extends AppCompatActivity {
   }
 
   public void goToMain (View view){
-    startActivity(new Intent(DeviceDetailsActivity.this, MainActivity.class));
+    if(isGoodVM.getConnected()[0] && isGoodVM.getConnected()[1] && isGoodVM.getConnected()[2] && isGoodVM.getConnected()[3]) {
+      startActivity(new Intent(DeviceDetailsActivity.this, MainActivity.class));
+    }
   }
 }

@@ -32,6 +32,11 @@ public class FrequencyBandViewModel extends BaseObservable implements LiveSeries
   private List<Listener<Double>> listeners = new ArrayList<>();
 
   final double[] percentage = new double[1];
+  final boolean[] isConnected1 = new boolean[1];
+  final boolean[] isConnected2 = new boolean[1];
+  final boolean[] isConnected3 = new boolean[1];
+  final boolean[] isConnected4 = new boolean[1];
+
 
   public FrequencyBandViewModel(StreamingDeviceViewModel device, Band band, ValueType type) {
     museType = FrequencyBands.toMuseType(band, type);
