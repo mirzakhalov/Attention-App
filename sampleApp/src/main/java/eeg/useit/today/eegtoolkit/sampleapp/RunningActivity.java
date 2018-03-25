@@ -4,14 +4,11 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.databinding.DataBindingUtil;
-import android.databinding.Observable;
-import android.graphics.drawable.RotateDrawable;
+import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.CountDownTimer;
-import android.os.Handler;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
@@ -19,23 +16,22 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ProgressBar;
 
-import com.choosemuse.libmuse.Eeg;
-import com.choosemuse.libmuse.Muse;
-import com.choosemuse.libmuse.MuseListener;
-import com.choosemuse.libmuse.MuseManagerAndroid;
+import com.mongodb.stitch.android.StitchClient;
 
-import eeg.useit.today.eegtoolkit.common.FrequencyBands;
-import eeg.useit.today.eegtoolkit.sampleapp.databinding.ActivityDeviceDetailsBinding;
-import eeg.useit.today.eegtoolkit.vm.ConnectionStrengthViewModel;
+import org.bson.Document;
+
 import eeg.useit.today.eegtoolkit.vm.FrequencyBandViewModel;
 import eeg.useit.today.eegtoolkit.vm.SensorGoodViewModel;
 import eeg.useit.today.eegtoolkit.vm.StreamingDeviceViewModel;
+import com.mongodb.stitch.android.services.mongodb.MongoClient;
 
 import static java.lang.Double.NaN;
 
-public class RunningActivity extends AppCompatActivity {
+public class RunningActivity extends AppCompatActivity implements StitchClientListener {
+    SharedPreferences sharedpref;
+    public static final String mypreference = "mypref";
+
     public static int DURATION_SEC = 5;
 
     /** The live device VM backing this view. */
@@ -45,9 +41,11 @@ public class RunningActivity extends AppCompatActivity {
     FrequencyBandViewModel deviceALPHA;
     FrequencyBandViewModel deviceBETA;
     SensorGoodViewModel isGoodVM;
-
+    private StitchClient _client;
+    private MongoClient _mongoClient;
     CountDownTimer countDownTimer;
-
+    MongoClient.Collection collection;
+    Document document;
     boolean isPaused = false;
 
     @Override
@@ -55,7 +53,19 @@ public class RunningActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_running);
 
+        sharedpref = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
+        String username = sharedpref.getString("username", "");
+
         Log.d("TAG","Marker2");
+        StitchClientManager.initialize(this.getApplicationContext());
+        StitchClientManager.registerListener(this);
+        document = new Document();
+        final String title = username;
+        document.append("name", title);
+        _mongoClient = new MongoClient(_client, "mongodb-atlas");
+        collection = _mongoClient.getDatabase("Users").getCollection("BrainData");
+
+
         countDownTimer = new CountDownTimer(600000, 1000) {
             int threshold = 10;
             double[] engagementVals = new  double[threshold];
@@ -63,6 +73,8 @@ public class RunningActivity extends AppCompatActivity {
             double slidingEngagementAverage;
             double slidingDrowisnessAverage;
             long itr = 0;
+
+
 
 
             public void onTick(long millisUntilFinished) {
@@ -76,7 +88,10 @@ public class RunningActivity extends AppCompatActivity {
                             Log.d("Engagement", String.valueOf(slidingEngagementAverage));
                             // 1. Instantiate an AlertDialog.Builder with its constructor
                             AlertDialog.Builder builder = new AlertDialog.Builder(RunningActivity.this);
-
+                            document.append("name", title);
+                            document.append("timestamp",System.currentTimeMillis()/1000);
+                            document.append("attention", slidingEngagementAverage);
+                            collection.insertOne(document);
                             builder.setTitle("Notification Box");
                             builder.setMessage("Test: This is a test notification to help focus");
                             // Add the buttons
@@ -95,13 +110,17 @@ public class RunningActivity extends AppCompatActivity {
                             AlertDialog dialog = builder.create();
                             dialog.show();
 
-                            MediaPlayer mPlayer = MediaPlayer.create(RunningActivity.this, R.raw.sound);
-                            mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                            mPlayer.start();
+                            //MediaPlayer mPlayer = MediaPlayer.create(RunningActivity.this, R.raw.sound);
+                            //mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                            //mPlayer.start();
 
                             // Vibrate
                             vibrate();
                         } else if (slidingEngagementAverage >= 0.3) {
+                            document.append("name", title);
+                            document.append("timestamp",System.currentTimeMillis());
+                            document.append("attention", slidingEngagementAverage);
+                            collection.insertOne(document);
                             Log.d("Engagement", "good");
                         } else {
                             Log.d("Engagement", "Not connected");
@@ -117,6 +136,24 @@ public class RunningActivity extends AppCompatActivity {
             }
         }.start();
 
+
+
+    }
+
+    @Override
+    public void onReady(StitchClient stitchClient) {
+        // Perform any Stitch-dependent initialization here.
+
+        // For example:
+        if(!stitchClient.isAuthenticated()) {
+            //TODO Make a message if not authenticated
+        }
+        // Or authenticate directly
+
+
+        // If this Activity maintains a reference to a
+        // StitchClient, populate it here
+        this._client = stitchClient;
 
     }
 
