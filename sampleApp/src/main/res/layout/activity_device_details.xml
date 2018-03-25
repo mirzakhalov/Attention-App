@@ -263,6 +263,7 @@
             android:layout_height="wrap_content"
             android:text="Button"
             android:gravity="center"
+            android:onClick="goToMain"
             app:layout_constraintTop_toBottomOf="@+id/graphGL" />
 
         <TextView

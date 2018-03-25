@@ -1,5 +1,10 @@
 <resources>
-    <string name="app_name">EegTools</string>
+    <string name="app_name">fix8</string>
     <string name="title_activity_device_details">DeviceDetailsActivity</string>
     <string name="title_activity_record">RecordActivity</string>
+    <string name="focus">Distraction - Focus</string>
+    <string name="drowsiness">Drowsiness - Alertness</string>
+    <string name="start_button">Start Session</string>
+    <string name="temp">temp</string>
+    <string name="end_button">End Session</string>
 </resources>

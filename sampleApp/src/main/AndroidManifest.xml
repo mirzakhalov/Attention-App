@@ -34,10 +34,6 @@
             android:label="@string/title_activity_device_details"
             android:theme="@style/AppTheme">
         </activity>
-        <activity android:name=".Running"
-            android:label="Running"
-            android:theme="@style/AppTheme">
-        </activity>
         <activity
             android:name=".MoreDeviceDetailsActivity"
             android:label="MoreDeviceDetailsActivity"
@@ -48,6 +44,11 @@
             android:label="@string/title_activity_record"
             android:theme="@style/AppTheme">
         </activity>
+        <activity android:name=".MainActivity">
+
+        </activity>
+        <activity android:name=".RunningActivity"></activity>
+
     </application>
 
 </manifest>

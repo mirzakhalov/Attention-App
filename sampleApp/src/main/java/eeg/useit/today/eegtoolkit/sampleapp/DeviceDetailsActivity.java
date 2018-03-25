@@ -69,14 +69,15 @@ public class DeviceDetailsActivity extends AppCompatActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-/*
+    /*
     Button startSession = findViewById(R.id.startButton);
     startSession.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        startActivity(intent);
+        startActivity(new Intent(DeviceDetailsActivity.this, MainActivity.class));
       }
-    });*/
+    });
+    */
     // Initialize Muse first up.
     MuseManagerAndroid.getInstance().setContext(this);
 
@@ -127,15 +128,17 @@ public class DeviceDetailsActivity extends AppCompatActivity {
       });
     }
 
-    new CountDownTimer(30000, 1000) {
+    new CountDownTimer(60000, 1000) {
 
       public void onTick(long millisUntilFinished) {
         if(getEngagement() != NaN && getEngagement() < 0.3) {
           Log.d("Engagement", String.valueOf(getEngagement()));
+          vibrate();
         } else if (getEngagement() >= 0.3){
           Log.d("Engagement", "good");
         } else {
-          Log.d("Engagement", "bad");
+          Log.d("Engagement", "Not connected");
+          //vibrate();
         }
       }
 
@@ -207,13 +210,13 @@ public class DeviceDetailsActivity extends AppCompatActivity {
 
   public double getEngagement() {
     double engagement = deviceBETA.getAverage() / (deviceALPHA.getAverage() + deviceTHETA.getAverage());
-    Log.d("Values", "TEST");
-    Log.d("Theta", String.valueOf(deviceTHETA.getAverage()));
-    Log.d("Delta", String.valueOf(deviceDELTA.getAverage()));
-    Log.d("Alpha", String.valueOf(deviceALPHA.getAverage()));
-    Log.d("Beta", String.valueOf(deviceBETA.getAverage()));
-    Log.d("Battery", String.valueOf(deviceBETA.getBattery()));
-    Log.d("Engagement", String.valueOf(engagement));
+    //Log.d("Values", "TEST");
+    //Log.d("Theta", String.valueOf(deviceTHETA.getAverage()));
+    //Log.d("Delta", String.valueOf(deviceDELTA.getAverage()));
+    //Log.d("Alpha", String.valueOf(deviceALPHA.getAverage()));
+    //Log.d("Beta", String.valueOf(deviceBETA.getAverage()));
+    //Log.d("Battery", String.valueOf(deviceBETA.getBattery()));
+    //Log.d("Engagement", String.valueOf(engagement));
     return engagement;
   }
 
@@ -222,9 +225,13 @@ public class DeviceDetailsActivity extends AppCompatActivity {
     // Vibrate for 500 milliseconds
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       v.vibrate(VibrationEffect.createOneShot(500,VibrationEffect.DEFAULT_AMPLITUDE));
-    }else{
+    }else {
       //deprecated in API 26
       v.vibrate(500);
     }
+  }
+
+  public void goToMain (View view){
+    startActivity(new Intent(DeviceDetailsActivity.this, MainActivity.class));
   }
 }
