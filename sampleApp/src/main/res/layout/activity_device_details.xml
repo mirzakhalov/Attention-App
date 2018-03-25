@@ -114,7 +114,7 @@
             app:layout_constraintRight_toRightOf="@+id/connected3"
             app:layout_constraintTop_toTopOf="@+id/connectionText"
             app:layout_constraintVertical_bias="1.0"
-            custom:backgroundColor="#ffffff" />
+            custom:backgroundColor="#00ffffff" />
 
         <TextView
             android:id="@+id/textView4"

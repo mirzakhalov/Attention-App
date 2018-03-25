@@ -152,7 +152,7 @@ public class RunningActivity extends AppCompatActivity {
 
     public void goToMain (View view){
         countDownTimer.cancel();
-        startActivity(new Intent(RunningActivity.this, MainActivity.class));
+        startActivity(new Intent(RunningActivity.this, DeviceDetailsActivity.class));
     }
 
     public void pauseTimer (View view){
