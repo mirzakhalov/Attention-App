@@ -7,4 +7,6 @@
     <string name="start_button">Start Session</string>
     <string name="temp">temp</string>
     <string name="end_button">End Session</string>
+    <string name="facebook_app_id">2090268504541769</string>
+    <string name="fb_login_protocol_scheme">fb2090268504541769</string>
 </resources>

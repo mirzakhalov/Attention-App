@@ -32,6 +32,11 @@ import com.choosemuse.libmuse.MuseDataPacket;
 import com.choosemuse.libmuse.MuseDataPacketType;
 import com.choosemuse.libmuse.MuseListener;
 import com.choosemuse.libmuse.MuseManagerAndroid;
+import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.stitch.android.StitchClient;
 
 import eeg.useit.today.eegtoolkit.common.BaseDataPacketListener;
 import eeg.useit.today.eegtoolkit.common.FrequencyBands.Band;
@@ -52,6 +57,8 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import org.bson.Document;
+
 import static java.lang.Double.NaN;
 
 /**
@@ -71,12 +78,14 @@ public class DeviceDetailsActivity extends AppCompatActivity {
 
   CountDownTimer countDownTimer;
 
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
     // Initialize Muse first up.
     MuseManagerAndroid.getInstance().setContext(this);
+
 
     // Bind viewmodel to the view.
     ActivityDeviceDetailsBinding binding =
@@ -155,6 +164,7 @@ public class DeviceDetailsActivity extends AppCompatActivity {
     }.start();
 
   }
+
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
